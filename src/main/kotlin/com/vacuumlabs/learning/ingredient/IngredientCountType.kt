@@ -8,9 +8,9 @@ package com.vacuumlabs.learning.ingredient
  * WEIGHT - An exact weight is needed (e.g. 300g of flour, 500g of chicken meat)
  *
  */
-enum class IngredientCountType {
-    BOOLEAN,
-    AMOUNT,
-    VOLUME,
-    WEIGHT
+enum class IngredientCountType(name: String) {
+    BOOLEAN("BOOLEAN"),
+    AMOUNT("AMOUNT"),
+    VOLUME("VOLUME"),
+    WEIGHT("WEIGHT")
 }
