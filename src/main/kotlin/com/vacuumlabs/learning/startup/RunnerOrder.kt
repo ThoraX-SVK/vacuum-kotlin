@@ -1,5 +1,6 @@
 package com.vacuumlabs.learning.startup
 
+import com.vacuumlabs.learning.startup.runners.FinishRunner
 import org.springframework.stereotype.Component
 
 @Component
