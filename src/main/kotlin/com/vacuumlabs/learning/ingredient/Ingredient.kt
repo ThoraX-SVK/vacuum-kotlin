@@ -20,6 +20,9 @@ open class Ingredient(
     @JoinColumn(name = "food_id")
     open var food : Food
 ) {
+
+    constructor() : this("", IngredientUnitType.NO_UNIT, 0, Food())
+
     @Id
     @GeneratedValue
     open var id: Int = 0
