@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
+import java.util.*
 
 @Service
 class FoodService @Autowired constructor(
@@ -32,6 +33,10 @@ class FoodService @Autowired constructor(
     fun saveFood(food : Food) : Food {
         food.ingredients.forEach { it.food = food }
         return foodRepository.save(food)
+    }
+
+    fun findOne(foodId : Int) : Optional<Food> {
+        return foodRepository.findById(foodId)
     }
 
     fun deleteFood(foodId : Int) {
