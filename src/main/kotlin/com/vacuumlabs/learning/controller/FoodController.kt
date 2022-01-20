@@ -16,16 +16,22 @@ class FoodController @Autowired constructor(
     val foodService: FoodService,
 ) {
 
-    @RequestMapping(value = ["/all"], method = [RequestMethod.GET], produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun getAllFood(): List<Food> {
-        return foodService.getAll()
-    }
-
     @RequestMapping(value = ["/add"], method = [RequestMethod.POST], produces = [MediaType.APPLICATION_JSON_VALUE])
     fun addNewFood(@RequestBody food: Food): ResponseEntity<Food> {
         foodService.isFoodFilledValidly(food)
         val savedFood = foodService.saveFood(food);
         return ResponseEntity.ok(savedFood)
+    }
+
+    @RequestMapping(value = ["/all"], method = [RequestMethod.GET], produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getAllFood(): List<Food> {
+        return foodService.getAll()
+    }
+
+    @RequestMapping(value = ["/{foodId}"], method = [RequestMethod.GET], produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getFood(@PathVariable foodId : Int) : ResponseEntity<Food> {
+        val foundFood = foodService.findOne(foodId).orElseThrow { throw ResponseStatusException(HttpStatus.NOT_FOUND, "No food with given ID.") }
+        return ResponseEntity.ok(foundFood)
     }
 
     @RequestMapping(value = ["/edit/{foodId}"], method = [RequestMethod.PUT], produces = [MediaType.APPLICATION_JSON_VALUE])
