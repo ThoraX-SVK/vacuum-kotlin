@@ -12,7 +12,7 @@ open class Ingredient(
     open var name: String,
 
     @Enumerated(EnumType.STRING)
-    open var countType: IngredientCountType,
+    open var unit : IngredientUnitType,
 
     open var amount : Int,
 
@@ -23,19 +23,4 @@ open class Ingredient(
     @Id
     @GeneratedValue
     open var id: Int = 0
-
-    open var unit : IngredientUnitType = getUnitTypeForCountType(countType)
-
-
-    fun getUnitTypeForCountType(countType : IngredientCountType) : IngredientUnitType {
-        val unitType = when (countType) {
-            IngredientCountType.BOOLEAN -> IngredientUnitType.NO_UNIT
-            IngredientCountType.AMOUNT -> IngredientUnitType.PCS
-            IngredientCountType.WEIGHT -> IngredientUnitType.G
-            IngredientCountType.VOLUME -> IngredientUnitType.ML
-        }
-
-        return unitType
-    }
-
 }
