@@ -1,10 +1,10 @@
 package com.vacuumlabs.learning.repository
 
-import com.vacuumlabs.learning.ingredient.Ingredient
+import com.vacuumlabs.learning.food.Food
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface IngredientRepository : JpaRepository<Ingredient, Int> {
+interface FoodRepository : JpaRepository<Food, Int> {
 
 }
