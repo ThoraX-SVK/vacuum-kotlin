@@ -34,8 +34,7 @@ class FoodService @Autowired constructor(
         return foodRepository.save(food)
     }
 
-
-
-
-
+    fun deleteFood(foodId : Int) {
+        foodRepository.deleteById(foodId)
+    }
 }
