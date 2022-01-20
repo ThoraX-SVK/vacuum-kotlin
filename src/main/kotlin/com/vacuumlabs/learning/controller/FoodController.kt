@@ -6,10 +6,7 @@ import com.vacuumlabs.learning.service.FoodService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestMethod
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/food")
@@ -23,10 +20,17 @@ class FoodController @Autowired constructor(
     }
 
     @RequestMapping(value = ["/add"], method = [RequestMethod.POST], produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun addNewFood(@RequestBody food: Food): ResponseEntity<*> {
+    fun addNewFood(@RequestBody food: Food): ResponseEntity<Food> {
         foodService.isFoodFilledValidly(food)
         val savedFood = foodService.saveFood(food);
         return ResponseEntity.ok(savedFood)
     }
+
+    @RequestMapping(value = ["/delete/{foodId}"], method = [RequestMethod.DELETE])
+    fun deleteFood(@PathVariable foodId : Int) : ResponseEntity<Int> {
+        foodService.deleteFood(foodId)
+        return ResponseEntity.ok().body(foodId);
+    }
+
 
 }
