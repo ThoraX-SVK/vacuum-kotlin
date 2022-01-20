@@ -1,10 +1,12 @@
 package com.vacuumlabs.learning.ingredient
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.vacuumlabs.learning.food.Food
 import javax.persistence.*
 
 /**
  *  Source of knowledge: https://www.jpa-buddy.com/blog/best-practices-and-common-pitfalls/
+ *  https://medium.com/@rajibrath20/the-best-way-to-map-a-onetomany-relationship-with-jpa-and-hibernate-dbbf6dba00d3
  */
 
 @Entity
@@ -18,6 +20,7 @@ open class Ingredient(
 
     @ManyToOne(targetEntity = Food::class, fetch = FetchType.LAZY)
     @JoinColumn(name = "food_id")
+    @JsonIgnore
     open var food : Food
 ) {
 
