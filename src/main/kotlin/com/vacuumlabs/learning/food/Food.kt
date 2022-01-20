@@ -12,6 +12,8 @@ open class Food(
 
 ) {
 
+    constructor() : this("", mutableListOf()) {}
+
     @Id
     @GeneratedValue
     open var id: Int = 0
