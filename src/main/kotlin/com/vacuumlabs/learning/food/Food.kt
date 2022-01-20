@@ -7,7 +7,7 @@ import javax.persistence.*
 open class Food(
     open var name: String,
 
-    @OneToMany(targetEntity = Ingredient::class, cascade = [CascadeType.ALL], fetch = FetchType.LAZY, mappedBy = "food")
+    @OneToMany(targetEntity = Ingredient::class, cascade = [CascadeType.ALL], fetch = FetchType.LAZY, mappedBy = "food", orphanRemoval = true)
     open var ingredients : MutableList<Ingredient>
 
 ) {
