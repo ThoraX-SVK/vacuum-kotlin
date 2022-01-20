@@ -3,15 +3,18 @@ package com.vacuumlabs.learning.service
 import com.vacuumlabs.learning.food.Food
 import com.vacuumlabs.learning.ingredient.Ingredient
 import com.vacuumlabs.learning.repository.FoodRepository
+import com.vacuumlabs.learning.repository.FoodTagRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
 import java.util.*
+import kotlin.collections.HashSet
 
 @Service
 class FoodService @Autowired constructor(
-    val foodRepository : FoodRepository
+    val foodRepository : FoodRepository,
+    val foodTagRepository: FoodTagRepository
 ) {
 
     fun getAll() : List<Food> {
@@ -32,7 +35,14 @@ class FoodService @Autowired constructor(
 
     fun saveFood(food : Food) : Food {
         food.ingredients.forEach { it.food = food }
+        loadTagsFromDbByNameAndSaveNewTagsToDb(food)
         return foodRepository.save(food)
+    }
+
+    fun loadTagsFromDbByNameAndSaveNewTagsToDb(food : Food) {
+        food.tags = food.tags.mapTo(HashSet()) {
+            foodTagRepository.findFoodTagByName(it.name).orElseGet({ foodTagRepository.save(it)} )
+        }
     }
 
     fun findOne(foodId : Int) : Optional<Food> {
