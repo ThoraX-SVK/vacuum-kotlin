@@ -1,47 +1,43 @@
 package com.vacuumlabs.learning.service
 
 import com.vacuumlabs.learning.entity.food.Food
-import com.vacuumlabs.learning.entity.ingredient.Ingredient
 import com.vacuumlabs.learning.repository.FoodRepository
-import com.vacuumlabs.learning.repository.FoodTagRepository
+import com.vacuumlabs.learning.service.exception.InvalidDataException
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
-import org.springframework.web.server.ResponseStatusException
+import org.springframework.transaction.annotation.Transactional
 import java.util.*
 import kotlin.collections.HashSet
 
 @Service
 class FoodService @Autowired constructor(
     val foodRepository : FoodRepository,
-    val foodTagRepository: FoodTagRepository
+    val ingredientService: IngredientService,
+    val foodTagService: FoodTagService
 ) {
 
     fun getAll() : List<Food> {
         return foodRepository.findAll()
     }
 
-    fun isFoodFilledValidly(food: Food) {
-        if(food.name.isBlank()) { throw ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Food name must consist of at least one character!") }
-        if(food.ingredients.isEmpty()) { throw ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Food needs to have at least one ingredient!") }
+    fun throwIfFoodNotValid(food: Food) {
+        if(food.name.isBlank()) { throw InvalidDataException("Food name must consist of at least one character!") }
+        if(food.ingredients.isEmpty()) { throw InvalidDataException("Food needs to have at least one ingredient!") }
 
-        food.ingredients.forEachIndexed { index, ingredient ->  isIngredientFilledValidly(ingredient, index) }
+        food.ingredients.forEachIndexed { index, ingredient ->  ingredientService.throwIfIngredientNotValid(ingredient, index) }
     }
 
-    private fun isIngredientFilledValidly(ingredient : Ingredient, index: Int) {
-        if(ingredient.name.isBlank()) { throw ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Ingredient at position ${index} - Name must consist of at least one character!") }
-        if(ingredient.amount <= 0) { throw ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Ingredient at position ${index} - Amount must be positive!") }
-    }
-
+    @Transactional(rollbackFor = [Exception::class])
     fun saveFood(food : Food) : Food {
-        food.ingredients.forEach { it.food = food }
+        throwIfFoodNotValid(food)
         loadTagsFromDbByNameAndSaveNewTagsToDb(food)
+        food.ingredients.forEach { it.food = food }
         return foodRepository.save(food)
     }
 
     fun loadTagsFromDbByNameAndSaveNewTagsToDb(food : Food) {
         food.tags = food.tags.mapTo(HashSet()) {
-            foodTagRepository.findFoodTagByName(it.name).orElseGet({ foodTagRepository.save(it)} )
+            foodTagService.findByName(it.name).orElseGet { foodTagService.save(it) }
         }
     }
 

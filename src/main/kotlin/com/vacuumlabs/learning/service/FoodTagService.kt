@@ -5,7 +5,6 @@ import com.vacuumlabs.learning.repository.FoodTagRepository
 import com.vacuumlabs.learning.service.exception.InvalidDataException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import kotlin.jvm.Throws
 
 @Service
 class FoodTagService @Autowired constructor(
@@ -17,18 +16,16 @@ class FoodTagService @Autowired constructor(
     }
 
 
-    fun throwExceptionIfFoodTagNotValid(foodTag: FoodTag) : Boolean {
-        if(foodTag.name.isBlank()) {
-           throw InvalidDataException("Name must consist of at least one character!")
-        }
-
-        return true
+    fun throwIfFoodTagNotValid(foodTag: FoodTag) {
+        if(foodTag.name.isBlank()) { throw InvalidDataException("Name must consist of at least one character!") }
     }
 
     fun save(foodTag : FoodTag) : FoodTag {
-        throwExceptionIfFoodTagNotValid(foodTag)
+        throwIfFoodTagNotValid(foodTag)
         return foodTagRepository.save(foodTag)
     }
+
+    fun findByName(name: String) = foodTagRepository.findFoodTagByName(name)
 
 
 }
