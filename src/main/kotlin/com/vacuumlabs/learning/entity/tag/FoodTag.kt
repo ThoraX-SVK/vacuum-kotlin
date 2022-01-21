@@ -1,4 +1,4 @@
-package com.vacuumlabs.learning.food.tag
+package com.vacuumlabs.learning.entity.tag
 
 import javax.persistence.*
 

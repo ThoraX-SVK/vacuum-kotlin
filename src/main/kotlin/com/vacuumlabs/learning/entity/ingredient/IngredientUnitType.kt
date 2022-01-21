@@ -1,4 +1,4 @@
-package com.vacuumlabs.learning.ingredient
+package com.vacuumlabs.learning.entity.ingredient
 
 enum class IngredientUnitType {
     PCS,

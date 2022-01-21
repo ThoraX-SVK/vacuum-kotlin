@@ -1,7 +1,7 @@
-package com.vacuumlabs.learning.ingredient
+package com.vacuumlabs.learning.entity.ingredient
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import com.vacuumlabs.learning.food.Food
+import com.vacuumlabs.learning.entity.food.Food
 import javax.persistence.*
 
 /**
