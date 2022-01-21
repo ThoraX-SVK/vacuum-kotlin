@@ -1,6 +1,7 @@
 package com.vacuumlabs.learning.service
 
 import com.vacuumlabs.learning.entity.food.Food
+import com.vacuumlabs.learning.entity.ingredient.Ingredient
 import com.vacuumlabs.learning.repository.FoodRepository
 import com.vacuumlabs.learning.service.exception.InvalidDataException
 import org.springframework.beans.factory.annotation.Autowired
@@ -23,8 +24,13 @@ class FoodService @Autowired constructor(
     fun throwIfFoodNotValid(food: Food) {
         if(food.name.isBlank()) { throw InvalidDataException("Food name must consist of at least one character!") }
         if(food.ingredients.isEmpty()) { throw InvalidDataException("Food needs to have at least one ingredient!") }
+        if(hasDuplicateIngredientByName(food.ingredients)) { throw InvalidDataException("There are two ingredients with the same name, ingredients must have unique names!") }
 
         food.ingredients.forEachIndexed { index, ingredient ->  ingredientService.throwIfIngredientNotValid(ingredient, index) }
+    }
+
+    fun hasDuplicateIngredientByName(ingredients : List<Ingredient>) : Boolean {
+        return ingredients.size != ingredients.distinctBy { it.name }.size
     }
 
     @Transactional(rollbackFor = [Exception::class])
