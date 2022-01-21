@@ -1,7 +1,7 @@
 package com.vacuumlabs.learning.service
 
-import com.vacuumlabs.learning.food.Food
-import com.vacuumlabs.learning.ingredient.Ingredient
+import com.vacuumlabs.learning.entity.food.Food
+import com.vacuumlabs.learning.entity.ingredient.Ingredient
 import com.vacuumlabs.learning.repository.FoodRepository
 import com.vacuumlabs.learning.repository.FoodTagRepository
 import org.springframework.beans.factory.annotation.Autowired

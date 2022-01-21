@@ -1,6 +1,6 @@
 package com.vacuumlabs.learning.repository
 
-import com.vacuumlabs.learning.food.Food
+import com.vacuumlabs.learning.entity.food.Food
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 

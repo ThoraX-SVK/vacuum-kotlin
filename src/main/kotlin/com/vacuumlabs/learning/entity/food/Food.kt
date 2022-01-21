@@ -1,7 +1,7 @@
-package com.vacuumlabs.learning.food
+package com.vacuumlabs.learning.entity.food
 
-import com.vacuumlabs.learning.food.tag.FoodTag
-import com.vacuumlabs.learning.ingredient.Ingredient
+import com.vacuumlabs.learning.entity.tag.FoodTag
+import com.vacuumlabs.learning.entity.ingredient.Ingredient
 import javax.persistence.*
 
 @Entity

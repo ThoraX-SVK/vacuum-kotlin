@@ -1,9 +1,9 @@
 package com.vacuumlabs.learning.startup.runners
 
-import com.vacuumlabs.learning.food.Food
-import com.vacuumlabs.learning.food.tag.FoodTag
-import com.vacuumlabs.learning.ingredient.Ingredient
-import com.vacuumlabs.learning.ingredient.IngredientUnitType
+import com.vacuumlabs.learning.entity.food.Food
+import com.vacuumlabs.learning.entity.tag.FoodTag
+import com.vacuumlabs.learning.entity.ingredient.Ingredient
+import com.vacuumlabs.learning.entity.ingredient.IngredientUnitType
 import com.vacuumlabs.learning.repository.FoodRepository
 import com.vacuumlabs.learning.repository.FoodTagRepository
 import com.vacuumlabs.learning.startup.OrderedCommandLineRunner

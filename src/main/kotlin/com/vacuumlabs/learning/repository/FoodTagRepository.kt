@@ -1,6 +1,6 @@
 package com.vacuumlabs.learning.repository
 
-import com.vacuumlabs.learning.food.tag.FoodTag
+import com.vacuumlabs.learning.entity.tag.FoodTag
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 import java.util.*

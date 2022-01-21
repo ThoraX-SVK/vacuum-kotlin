@@ -1,7 +1,6 @@
 package com.vacuumlabs.learning.controller
 
-import com.vacuumlabs.learning.food.Food
-import com.vacuumlabs.learning.repository.FoodRepository
+import com.vacuumlabs.learning.entity.food.Food
 import com.vacuumlabs.learning.service.FoodService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
