@@ -1,15 +1,17 @@
 package com.vacuumlabs.learning.entity.food
 
+import com.vacuumlabs.learning.entity.EntityId
 import com.vacuumlabs.learning.entity.tag.FoodTag
 import com.vacuumlabs.learning.entity.ingredient.Ingredient
 import javax.persistence.*
 
 @Entity
-open class Food(
-    open var name: String,
+open class Food : EntityId() {
+
+    open lateinit var name: String
 
     @OneToMany(targetEntity = Ingredient::class, cascade = [CascadeType.ALL], fetch = FetchType.LAZY, mappedBy = "food", orphanRemoval = true)
-    open var ingredients : MutableList<Ingredient>,
+    open lateinit var ingredients : MutableList<Ingredient>
 
     @Column(nullable = true)
     @ManyToMany(targetEntity = FoodTag::class, cascade = [CascadeType.MERGE], fetch = FetchType.LAZY)
@@ -18,12 +20,5 @@ open class Food(
         joinColumns = [JoinColumn(name = "FOOD_ID", referencedColumnName = "id")],
         inverseJoinColumns = [JoinColumn(name = "TAG_ID", referencedColumnName = "id")]
     )
-    open var tags : MutableSet<FoodTag>
-) {
-
-    constructor() : this("", mutableListOf(), mutableSetOf()) {}
-
-    @Id
-    @GeneratedValue
-    open var id: Int = 0
+    open lateinit var tags : MutableSet<FoodTag>
 }

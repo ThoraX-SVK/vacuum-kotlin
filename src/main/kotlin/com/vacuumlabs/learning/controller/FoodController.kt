@@ -63,4 +63,12 @@ class FoodController @Autowired constructor(
 
         return ResponseEntity.ok(foodId)
     }
+
+    @RequestMapping(value = ["/search"], method = [RequestMethod.GET])
+    fun searchFoodsByName(@RequestParam(required = true) name : String) : List<Food> {
+        //TODO: Add support for case insensitive search
+        return foodService.findFoodsByName(name)
+    }
+
+
 }

@@ -1,6 +1,7 @@
 package com.vacuumlabs.learning.entity.ingredient
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.vacuumlabs.learning.entity.EntityId
 import com.vacuumlabs.learning.entity.food.Food
 import javax.persistence.*
 
@@ -12,23 +13,16 @@ import javax.persistence.*
  */
 
 @Entity
-open class Ingredient(
-    open var name: String,
+open class Ingredient : EntityId() {
+    open lateinit var name: String
 
     @Enumerated(EnumType.STRING)
-    open var unit : IngredientUnitType,
+    open lateinit var unit : IngredientUnitType
 
-    open var amount : Int,
+    open var amount : Int = 0
 
     @ManyToOne(targetEntity = Food::class, fetch = FetchType.LAZY)
     @JoinColumn(name = "food_id")
     @JsonIgnore
-    open var food : Food
-) {
-
-    constructor() : this("", IngredientUnitType.NO_UNIT, 0, Food())
-
-    @Id
-    @GeneratedValue
-    open var id: Int = 0
+    open lateinit var food : Food
 }

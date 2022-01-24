@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository
 @Repository
 interface FoodRepository : JpaRepository<Food, Int> {
 
+    fun findAllByNameStartsWith(name : String) : List<Food>
+
 }

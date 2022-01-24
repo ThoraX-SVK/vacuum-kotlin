@@ -24,14 +24,16 @@ class FoodServiceSaveTests @Autowired constructor(
 
     @Test()
     fun givenEmptyFood_thenThrowException() {
-        assertThrows<InvalidDataException> {
+        assertThrows<UninitializedPropertyAccessException> {
             foodService.saveFood(Food())
         }
     }
 
     @Test()
     fun givenFoodWithNoIngredients_thenThrowException() {
-        val food = Food("Test food", mutableListOf(), mutableSetOf())
+        val food = Food()
+        food.name = "Test food"
+        food.ingredients = mutableListOf()
 
         assertThrows<InvalidDataException> {
             foodService.saveFood(food)
@@ -40,7 +42,8 @@ class FoodServiceSaveTests @Autowired constructor(
 
     @Test()
     fun givenFoodWithNoName_thenThrowException() {
-        val food = Food("", mutableListOf(Ingredient("Test", IngredientUnitType.PCS, 1, Food())), mutableSetOf())
+        val food = Food()
+        food.name = ""
 
         assertThrows<InvalidDataException> {
             foodService.saveFood(food)
@@ -49,7 +52,15 @@ class FoodServiceSaveTests @Autowired constructor(
 
     @Test()
     fun givenFoodWithIngredientWithNoName_thenThrowException() {
-        val food = Food("Test food", mutableListOf(Ingredient("", IngredientUnitType.PCS, 1, Food())), mutableSetOf())
+        val food = Food()
+        val ingredient = Ingredient()
+        ingredient.name = ""
+        ingredient.unit = IngredientUnitType.G
+        ingredient.amount = 100
+        ingredient.food = food
+
+        food.name = "Test food"
+        food.ingredients = mutableListOf(ingredient)
 
         assertThrows<InvalidDataException> {
             foodService.saveFood(food)
@@ -58,7 +69,15 @@ class FoodServiceSaveTests @Autowired constructor(
 
     @Test()
     fun givenFoodWithNonPositiveAmount_thenThrowException() {
-        val food = Food("Test food", mutableListOf(Ingredient("Test", IngredientUnitType.PCS, 0, Food())), mutableSetOf())
+        val food = Food()
+        val ingredient = Ingredient()
+        ingredient.name = "Test ingredient"
+        ingredient.unit = IngredientUnitType.G
+        ingredient.amount = 0
+        ingredient.food = food
+
+        food.name = "Test food"
+        food.ingredients = mutableListOf(ingredient)
 
         assertThrows<InvalidDataException> {
             foodService.saveFood(food)
@@ -67,10 +86,21 @@ class FoodServiceSaveTests @Autowired constructor(
 
     @Test()
     fun givenFoodWithTwoSameIngredients_thenThrowException() {
-        val food = Food("Test food",
-            mutableListOf(Ingredient("Test", IngredientUnitType.PCS, 1, Food()), Ingredient("Test", IngredientUnitType.PCS, 1, Food())),
-            mutableSetOf()
-        )
+        val food = Food()
+        val ingredient = Ingredient()
+        ingredient.name = "Test ingredient"
+        ingredient.unit = IngredientUnitType.G
+        ingredient.amount = 100
+        ingredient.food = food
+
+        val secondIngredient = Ingredient()
+        secondIngredient.name = "Test ingredient"
+        secondIngredient.unit = IngredientUnitType.G
+        secondIngredient.amount = 200
+        secondIngredient.food = food
+
+        food.name = "Test food"
+        food.ingredients = mutableListOf(ingredient, secondIngredient)
 
         assertThrows<InvalidDataException> {
             foodService.saveFood(food)
@@ -80,25 +110,48 @@ class FoodServiceSaveTests @Autowired constructor(
     @Test()
     fun givenFoodWithExistingTag_thenUseTagFromDbWhenSavingFood() {
 
-        val tag = FoodTag("testTag")
+        val tag = FoodTag()
+        tag.name = "testTag"
         val savedTag = foodTagRepository.save(tag)
 
-        val food = Food("Test food",
-            mutableListOf(Ingredient("Test", IngredientUnitType.PCS, 1, Food())),
-            mutableSetOf(FoodTag("testTag"))
-        )
+        val food = Food()
+        val ingredient = Ingredient()
+        ingredient.name = "Test ingredient"
+        ingredient.unit = IngredientUnitType.G
+        ingredient.amount = 100
+        ingredient.food = food
+
+
+        food.name = "Test food"
+        food.ingredients = mutableListOf(ingredient)
+
+        val anotherTag = FoodTag()
+        anotherTag.name = "testTag"
+        food.tags = mutableSetOf(anotherTag)
 
         val savedFood = foodService.saveFood(food)
 
-        assert(savedTag.id == savedFood.tags.first().id)
+        assert(savedTag == savedFood.tags.first())
     }
 
     @Test()
     fun givenFoodWithTwoSameTags_thenOnlyOneTagSavedToDb() {
-        val food = Food("Test food",
-            mutableListOf(Ingredient("Test", IngredientUnitType.PCS, 1, Food())),
-            mutableSetOf(FoodTag("testTag"), FoodTag("testTag"))
-        )
+        val food = Food()
+        val ingredient = Ingredient()
+        ingredient.name = "Test ingredient"
+        ingredient.unit = IngredientUnitType.G
+        ingredient.amount = 100
+        ingredient.food = food
+
+
+        food.name = "Test food"
+        food.ingredients = mutableListOf(ingredient)
+
+        val tag = FoodTag()
+        tag.name = "testTag"
+        val anotherTag = FoodTag()
+        anotherTag.name = "testTag"
+        food.tags = mutableSetOf(tag, anotherTag)
 
         val savedFood = foodService.saveFood(food)
 
@@ -108,14 +161,25 @@ class FoodServiceSaveTests @Autowired constructor(
 
     @Test()
     fun givenValidFood_thenIsSavedToDb() {
-        val food = Food("Test food",
-            mutableListOf(Ingredient("Test", IngredientUnitType.PCS, 1, Food()), Ingredient("Test 2", IngredientUnitType.G, 200, Food())),
-            mutableSetOf(FoodTag("testTag"), FoodTag("testTag 2"))
-        )
+        val food = Food()
+        val ingredient = Ingredient()
+        ingredient.name = "Test ingredient"
+        ingredient.unit = IngredientUnitType.G
+        ingredient.amount = 100
+        ingredient.food = food
+
+        food.name = "Test food"
+        food.ingredients = mutableListOf(ingredient)
+        val tag = FoodTag()
+        tag.name = "testTag"
+        val anotherTag = FoodTag()
+        anotherTag.name = "testTag 2"
+
+        food.tags = mutableSetOf(tag, anotherTag)
 
         val savedFood = foodService.saveFood(food)
         val allFood = foodService.getAll()
 
-        assert(savedFood.id == allFood.first().id)
+        assert(savedFood == allFood.first())
     }
 }

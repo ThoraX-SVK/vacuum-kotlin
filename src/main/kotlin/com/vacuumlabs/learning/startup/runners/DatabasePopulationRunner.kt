@@ -20,20 +20,5 @@ class DatabasePopulationRunner @Autowired constructor(
 
     override fun run(vararg args: String?) {
 
-        val tag = FoodTag("Breakfast")
-        foodTagRepository.save(tag)
-
-        val food : Food = Food("toast", mutableListOf(), mutableSetOf(tag))
-        val toastBread = Ingredient("Toast bread bun", IngredientUnitType.PCS, 1, food)
-        val butter = Ingredient("Butter", IngredientUnitType.PCS, 1, food)
-        val ham = Ingredient("Ham", IngredientUnitType.PCS, 1, food)
-        val cheese = Ingredient("Cheddar cheese", IngredientUnitType.PCS, 1, food)
-
-        food.ingredients.add(toastBread)
-        food.ingredients.add(butter)
-        food.ingredients.add(ham)
-        food.ingredients.add(cheese)
-
-        foodRepository.save(food)
     }
 }

@@ -1,15 +1,10 @@
 package com.vacuumlabs.learning.entity.tag
 
+import com.vacuumlabs.learning.entity.EntityId
 import javax.persistence.*
 
 @Entity
-open class FoodTag(
-    open var name : String,
-) {
+open class FoodTag : EntityId() {
 
-    constructor() : this("")
-
-    @Id
-    @GeneratedValue
-    open var id: Int = 0
+    open lateinit var name : String
 }

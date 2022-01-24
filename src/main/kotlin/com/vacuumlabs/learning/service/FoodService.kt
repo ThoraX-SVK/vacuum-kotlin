@@ -54,4 +54,10 @@ class FoodService @Autowired constructor(
     fun deleteFood(foodId : Int) {
         foodRepository.deleteById(foodId)
     }
+
+    fun findFoodsByName(foodName: String) : List<Food> {
+        return foodRepository.findAllByNameStartsWith(foodName)
+    }
+
+
 }
